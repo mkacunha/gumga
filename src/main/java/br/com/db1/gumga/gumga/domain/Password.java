@@ -47,8 +47,4 @@ public class Password {
 		return nivel;
 	}
 
-	public void setNivel(Integer nivel) {
-		this.nivel = nivel;
-	}
-
 }
