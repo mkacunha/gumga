@@ -1,51 +1,30 @@
 package br.com.db1.gumga.gumga.services;
 
+import br.com.db1.gumga.gumga.domain.Password;
+import br.com.db1.gumga.gumga.interfaces.Avaliador;
+import br.com.db1.gumga.gumga.repositories.PasswordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.db1.gumga.gumga.domain.AvaliaCaracteres;
-import br.com.db1.gumga.gumga.domain.AvaliaMaiusculas;
-import br.com.db1.gumga.gumga.domain.AvaliaMinusculas;
-import br.com.db1.gumga.gumga.domain.AvaliaNumeros;
-import br.com.db1.gumga.gumga.domain.AvaliaTamanho;
-import br.com.db1.gumga.gumga.domain.Password;
-import br.com.db1.gumga.gumga.repositories.PasswordRepository;
+import java.util.List;
 
 @Service
 public class AvaliadorService {
 
-	@Autowired
-	private PasswordRepository passwordRepository;
+    @Autowired
+    private PasswordRepository passwordRepository;
 
-	@Autowired
-	private AvaliaCaracteres avaliaCaracteres;
+    @Autowired
+    private List<Avaliador> avaliadores;
 
-	@Autowired
-	private AvaliaMaiusculas avaliaMaiusculas;
+    public Password postOrUpdate(Password password) {
+        this.avaliadores.forEach(avaliador -> avaliador.avaliaPassword(password));
 
-	@Autowired
-	private AvaliaTamanho avaliaTamanho;
+        if (password.getNivel() >= 80) {
+            this.passwordRepository.save(password);
+        }
 
-	@Autowired
-	private AvaliaMinusculas avaliaMinusculas;
-
-	@Autowired
-	private AvaliaNumeros avaliaNumeros;
-
-	public Password postOrUpdate(Password password) {
-
-		this.avaliaCaracteres.avaliaPassword(password);
-		this.avaliaMaiusculas.avaliaPassword(password);
-		this.avaliaTamanho.avaliaPassword(password);
-		this.avaliaMinusculas.avaliaPassword(password);
-		this.avaliaNumeros.avaliaPassword(password);
-
-		if (password.getNivel() >= 80) {
-			this.passwordRepository.save(password);
-		}
-
-		return password;
-
-	}
+        return password;
+    }
 
 }
